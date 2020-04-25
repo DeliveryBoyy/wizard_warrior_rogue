@@ -1,0 +1,1 @@
+PLAYER_LIVES = 2
