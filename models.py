@@ -1,4 +1,5 @@
 from random import randint
+from enum import Enum
 
 from exceptions import EnemyDown, GameOver
 from settings import PLAYER_LIVES
@@ -30,12 +31,14 @@ class Player:
     def decrease_lives(self):
         self.lives -= 1
         if not self.lives:
-            raise GameOver
+            raise GameOver(self)
 
     def attack(self, enemy_object):
-        attack_result = self.fight(int(input('Choose your attacker:\n1. Wizard\n2. Warrior\n3. Rogue\n')),
+        attack_result = self.fight(int(input('Choose your attacker:\n1. Wizard\n2. Warrior\n3. Rogue\n > ')),
                                    enemy_object.select_attack())
         if attack_result == 1:
+            self.score += 1
+            enemy_object.decrease_lives()
             return 'You attacked successfully!'
         elif attack_result:
             return 'You missed!'
@@ -44,7 +47,7 @@ class Player:
 
     def defense(self, enemy_object):
         defense_result = self.fight(enemy_object.select_attack(),
-                                    int(input('Choose your attacker:\n1. Wizard\n2. Warrior\n3. Rogue\n')))
+                                    int(input('Choose your defender:\n1. Wizard\n2. Warrior\n3. Rogue\n > ')))
         if defense_result == -1:
             return 'You defended successfully!'
         elif defense_result:
@@ -67,3 +70,4 @@ class Enemy:
         self.lives -= 1
         if not self.lives:
             raise EnemyDown
+
