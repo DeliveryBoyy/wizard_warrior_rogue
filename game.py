@@ -1,11 +1,18 @@
+"""
+Main game script. Runs the game for the user.
+"""
+
 import re
 
-from models import Player, Enemy
 from exceptions import EnemyDown, GameOver
+from models import Player, Enemy
 from settings import COMMANDS
 
 
 def play():
+    """
+    Main game function. Handles the user and the game process.
+    """
     # Create the player object with the name from input.
     # The input is validated via a regex - the name can consist of 3-20 lower or uppercase latin letters and digits.
     player_name = input('Let\'s play!\nPlease enter your name:\n > ')
@@ -29,8 +36,8 @@ def play():
         if player_command == 'start':
             start = True
         elif player_command == 'show scores':
-            with open('scores.txt', 'r') as f:
-                print('{}{}{}'.format('----------\n', f.read().rstrip('\n'), '\n----------'))
+            with open('scores.txt', 'r') as file:
+                print('{}{}{}'.format('----------\n', file.read().rstrip('\n'), '\n----------'))
         elif player_command == 'help':
             for command in COMMANDS:
                 print(f'-- {command}')
@@ -45,11 +52,12 @@ def play():
             print(player.attack(enemy))
             print(player.defense(enemy))
         except EnemyDown:
-            print('!!! ENEMY DOWN !!!')
             enemy = Enemy(enemy.level + 1)
+            print(f'!!! ENEMY DOWN !!!\nAnother enemy appears! (level {enemy.level}).')
             player.score += 5
 
 
+# Run game
 if __name__ == '__main__':
     try:
         play()
